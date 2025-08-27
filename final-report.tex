@@ -1,0 +1,437 @@
+% This is samplepaper.tex, a sample chapter demonstrating the
+% LLNCS macro package for Springer Computer Science proceedings;
+% Version 2.21 of 2022/01/12
+%
+\documentclass[runningheads]{llncs}
+\usepackage[inline]{enumitem}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{geometry}
+\geometry{a4paper, left=25mm, right=25mm, top=25mm, bottom=25mm}
+
+% \usepackage{fontspec}
+%
+\usepackage[T1]{fontenc}
+% T1 fonts will be used to generate the final print and online PDFs,
+% so please use T1 fonts in your manuscript whenever possible.
+% Other font encondings may result in incorrect characters.
+%
+\usepackage{graphicx}
+% Used for displaying a sample figure. If possible, figure files should
+% be included in EPS format.
+%
+% If you use the hyperref package, please uncomment the following two lines
+% to display URLs in blue roman font according to Springer's eBook style:
+%\usepackage{color}
+%\renewcommand\UrlFont{\color{blue}\rmfamily}
+%
+
+
+\begin{document}
+
+\begin{titlepage}
+    \centering
+    \vspace*{2cm}
+    
+    {\scshape\Large PhD Programme in Computer Science and Engineering \par}
+    \vspace{0.5cm}
+    {\scshape\large Cycle XXXIX \par}
+    \vspace{0.5cm}
+
+    \rule{\linewidth}{0.4mm} \\ [0.1mm]
+    \raisebox{0.2cm}{\rule{\linewidth}{0.8mm}} \\[0.8cm]
+    {\huge\bfseries PhD First Year -- Final Report \par}
+    \vspace{0.8cm}
+    \rule{\linewidth}{0.8mm} \\ [0.1pt]
+    \raisebox{0.2cm}{\rule{\linewidth}{0.4mm}} \\[1.5cm]
+    
+    % {\Large PhD First Year -- Final Report \par}
+
+    \vspace{1.5cm}
+    
+    \noindent
+    \begin{minipage}[t]{0.45\textwidth}
+        \raggedright
+        \textbf{Commission:}\\[0.5cm]
+        Prof. Mirko Viroli\\
+        Prof. Danilo Pianini\\
+        Prof. Matteo Ferrara
+    \end{minipage}%
+    \hfill
+    \begin{minipage}[t]{0.45\textwidth}
+        \raggedleft
+        \textbf{PhD Student:}\\[0.5cm]
+        Davide Domini
+    \end{minipage}
+    
+    \vfill
+    
+\end{titlepage}
+
+\section{Context}
+Computing devices have become ubiquitous in everyday life.
+%
+This trend has paved the way for the emergence of a field known as collective computing~\cite{DBLP:journals/computer/Abowd16}.
+%
+These systems are composed of many -- potentially heterogeneous -- interacting devices. 
+%
+Each device is equipped with sensors to perceive the surrounding environment and is able to communicate with a subset of other devices 
+ (e.g., based on logical or physical proximity). %, thus creating a neighborhood.
+%
+Some real-world examples of these systems include: 
+ crowd management using wearable devices or smartphones,
+ smart surveillance using flocks of drones, 
+ air quality monitoring, and many more. 
+%
+Analyzing collective systems it is possible to identify some key features, namely:
+\begin{enumerate*}[label=(\roman*)]
+    \item each device, potentially, produces a huge amount of data;
+    \item devices need to cooperate among themselves to solve the collective task; and
+    %\item data are naturally distributed (i.e., ); and
+    \item data are subject to privacy constraints due to laws (e.g., GDPR~\cite{GDPR} in the European Union).
+\end{enumerate*}
+
+In recent years, macroprogramming approaches~\cite{DBLP:journals/csur/Casadei23} have been proposed to shift the focus onto the collective of devices
+ rather than on the single device.
+%
+More in particular, Aggregate Computing (AC)~\cite{DBLP:journals/computer/BealPV15} proposes the development of a single aggregate program as a 
+ composition of functions over computational fields (i.e., an abstraction that maps each device to a value in space and time). 
+%
+AC is rooted in Field Calculus (FC)~\cite{DBLP:conf/forte/AudritoVDPB19}, a core language designed to capture the essential aspects of languages that make use of
+ computational fields and that allows the formal demonstration of properties such as 
+ self-stabilization~\cite{DBLP:conf/coordination/ViroliD14} and eventual consistency~\cite{DBLP:journals/taas/BealVPD17}.
+%
+Moreover, AC allows the definition of scalable and resilient programs, thus being a good candidate as a framework 
+ for cooperative learning in collective systems.
+%
+%While AC allows the definition of scalable and resilient programs, encoding very complex behaviors is still an open challange.
+%
+For this reason, attempts have been made to combine AC and machine learning, first using multi-agent reinforcement learning 
+techniques~\cite{DBLP:conf/coordination/AguzziCV22,DBLP:conf/acsos/AguzziVE23,DBLP:conf/coordination/DominiCAV23,DBLP:journals/scp/DominiCAV24,DBLP:conf/woa/DominiFAV24}, 
+and then shifting towards federated learning~\cite{DBLP:conf/coordination/DominiAEV24,DBLP:conf/acsos/DominiFAVE24}. 
+
+%
+Specifically, Federated Learning (FL)~\cite{DBLP:conf/aistats/McMahanMRHA17} has emerged as a framework to cooperatively train a joint model
+ while maintaining data localization.
+%
+Classic FL approaches are based on a simple client-server architecture in which each client $c_i$, at each time step $t$, is responsible for training 
+ a model $m_i^t$ on the local dataset $D_i$ (i.e., the local model), while the server is responsible for collecting all the 
+ models $\{m_1^t, \dots, m_n^t\}$ and for aggregating them -- following some aggregation policy~\cite{DBLP:journals/fgcs/QiCGIFP24} -- into the 
+ new global model $m_g^{t+1}$ which will be further locally improved by each device at the next time step.
+%
+Since FL does not require sharing the data it is possible to work also in contexts with privacy concerns and where it is not possible to collect
+ all the data in a centralized server due to their huge volume and resource constraints.
+%
+However, two main challenges are still open, namely:
+\begin{enumerate*}[label=(\roman*)]
+    \item in real-world systems, data are often non-independently and identically distributed (non-iid), thus leading centralized implementations
+     of FL to convergence issues~\cite{DBLP:conf/mir/YangLHSL024}; and
+    \item relying on a single central server introduces a bottleneck (especially in systems with a huge amount of devices) 
+     and a single point of failure (i.e., if the server fails then all the learning process is interrupted).
+\end{enumerate*}
+
+To tackle these challenges, in the literature, works have been proposed to introduce FL algorithms based 
+ on distributed architectures~\cite{DBLP:journals/jpdc/HegedusDJ21,DBLP:conf/dsn/WinkN21}
+ and personalization~\cite{DBLP:journals/tnn/TanYCY23}.
+%
+More in particular, our focus lies on a subfield of personalized FL which assumes that devices can be clustered into groups and that inside each 
+ group data are independently and identically distributed (iid)~\cite{DBLP:journals/tit/GhoshCYR22,DBLP:conf/ecai/Li0TWXZ23}, 
+ thus avoiding convergence issues and producing models with better performance.
+% 
+Although clustered FL generally has significant potential, its applicability in the context of collective systems holds many challenges, mainly: 
+ clustering is performed in a centralized manner, and a fixed number of clusters must be chosen a priori. 
+% 
+This causes issues because, in contexts with numerous devices, there is considerable overhead associated with selecting clusters. 
+%
+Moreover, predefining a number of clusters is often a difficult task, and an incorrect number can lead to convergence problems.
+%
+Finally, clustered FL methods in the literature does not take into account the spatial distribution of devices.
+%
+However, in many contexts, this information can be crucial for achieving better clustering. 
+%
+For instance, consider a task that uses text written by users on their phones; it is very likely that users who are 
+ geographically close (e.g., within the same state) will write similarly, whereas users who are far apart 
+ will produce data with different distributions.
+
+\section{Methodology and Preliminary Results}\label{sec:methodology}
+
+ Initially, a review of related works in the literature has been conducted to assess the current state of development in FL 
+  and to identify key challenges.
+ %
+ Specifically, the focus was on subareas relevant to our interests, namely: 
+  higly distributed systems and non-iid data.
+  %\dom{forse higly distributed systems va cambiato con qualcosa di più specifico}
+ %
+ Once identified the main open problems and challenges in FL we started to design custom algorithms based 
+  on field coordination.
+  Regarding AC, we have exploited the ScaFi~\cite{DBLP:journals/softx/CasadeiVAP22} implementation and toolchain
+  which provides a high-level functional DSL in Scala.
+  On the other hand, as deploying such systems in real-world has high costs, we used a simulator for pervasive systems, 
+  namely: Alchemist~\cite{DBLP:journals/jos/PianiniMV13}.
+ 
+ More in detail -- in our first work~\cite{DBLP:conf/coordination/DominiAEV24} -- we tried to assess two different aspects of
+  FL based on field coordination.
+ %
+ On the one hand, we implemented a full peer-to-peer (i.e., devices are not split into clusters) FL algorithm using AC abstractions, then we compared it with a 
+  centralized implementation of FL to see whether results and accuracies were comparable.
+ %
+ On the other hand, we implemented a version of FL based on the SCR pattern. 
+ %
+ The hypothesis behind this experiment was that geographically close devices may have a similar data 
+  distribution for a certain phenomenon.
+ % 
+ Exploiting SCR allowed us to create multiple sub-zones within a certain range and then perform a centralized FL inside each zone,
+  thus evolving multiple specialized models.
+ %
+ To experiment with this algorithm we used PM10 samples from different stations in Europe\footnote{Dataset available at: \url{https://www.eea.europa.eu/data-and-maps/dashboards/air-quality-statistics}}
+  and performed a task of air quality forecasting.
+ %
+ Results have shown that the proposed approach has similar performance to the centralized implementation when using iid data 
+  while outperforming it in the case of non-iid data with distributions influenced by the geographical location of devices.
+ 
+ Finally, we proposed another approach~\cite{DBLP:conf/acsos/DominiFAVE24} which extends the implementation based on the SCR pattern
+     using the concept of space-fluidity~\cite{DBLP:journals/lmcs/CasadeiMPVZ23}.
+ %
+ In this way, it is possible to create specialized subzones that are not only based on spatial proximity but also take into account other 
+  specified metrics.
+ %
+ For instance, we used a metric based on the loss of local models to broaden or shrink zones to match a specified 
+  maximum loss threshold.   
+
+\section{Future Work and Research Plan}\label{sec:future}
+
+Beyond the preliminary results obtained, we believe that the integration of federated learning and macroprogramming for collective systems still has several
+ open directions that can lead to improvements. 
+
+Firstly, considering the context of collective systems and the limited resources available to various devices in most cases, 
+%we believe that an interesting direction could be
+ a particularly promising direction that will be pursued in the near future is 
+ experimenting with methods like quantization and pruning or using novel architectures like the sparse neural networks, 
+ which aim to limit the use of weights in order to reduce the computational load required for training and inference.
+
+Moreover, it would be interesting to study the effect that the movement of nodes in space and consequently between various clusters has. 
+%
+We believe that this, within certain limits, can bring benefits due to the sharing of previously acquired knowledge (i.e., knowledge fertilization). 
+%
+To study this phenomenon, metrics will need to be defined to quantitatively and objectively measure the effects.
+
+Finally, given the huge variability over time of the environments in which these systems are immersed, a solution to maintain adaptability over time could 
+ be to integrate the proposed solutions with continual learning.
+
+\section{Pubblications}
+List of published (or already accepted) papers:
+\begin{enumerate}
+    \item \emph{ScaRLib: A Framework for Cooperative Many Agent Deep Reinforcement Learning in Scala}~\cite{DBLP:conf/coordination/DominiCAV23} \\
+    \textbf{Abstract: }
+    Multi Agent Reinforcement Learning (MARL) is an emerging field in machine learning where multiple agents learn, simultaneously and in a shared environment, 
+     how to optimise a global or local reward signal. MARL has gained significant interest in recent years due to its successful applications in various domains,
+     such as robotics, IoT, and traffic control. Cooperative Many Agent Reinforcement Learning (CMARL) is a relevant subclass of MARL, where thousands of 
+     agents work together to achieve a common coordination goal.
+    %
+    In this paper, we introduce ScaRLib, a Scala framework relying on state-of-the-art deep learning libraries to support the development of CMARL systems. 
+    %
+    The framework supports the specification of centralised training and decentralised execution, and it is designed to be easily extensible, allowing to add new 
+     algorithms, new types of environments, and new coordination toolchains.
+    %
+    This paper describes the main structure and features of ScaRLib and includes basic demonstrations that showcase binding with one such toolchain: 
+     ScaFi programming framework and Alchemist simulator can be exploited to enable learning of field-based coordination policies for large-scale systems.
+    %
+    \item \emph{Field-Based Coordination for Federated Learning}~\cite{DBLP:conf/coordination/DominiAEV24} \\
+    \textbf{Abstract: }
+    Federated Learning has gained increasing interest in the last years, as it allows the training of machine learning models with a large number of devices 
+     by exchanging only the weights of the trained neural networks. 
+    % 
+    Without the need to upload the training data to a central server, privacy concerns and potential bottlenecks can be removed as fewer data is transmitted. 
+    %
+    However, the current state-of-the-art solutions are typically centralized, and do not provide for suitable coordination mechanisms to take into account 
+     spatial distribution of devices and local communications, which can sometimes play a crucial role. 
+    % 
+    Therefore, we propose a field-based coordination approach for federated learning, where the devices coordinate with each other through the use of 
+     computational fields. 
+    %
+    We show that this approach can be used to train models in a completely peer-to-peer fashion. 
+    %
+    Additionally, our approach also allows for emergently create zones of interests, and produce specialized models for each zone enabling each agent 
+     to refine their models for the tasks at hand.
+    %
+    We evaluate our approach in a simulated environment leveraging aggregate computing—the reference global-to-local field-based coordination programming paradigm. 
+    %
+    The results show that our approach is comparable to the state-of-the-art centralized solutions, while enabling a more flexible and scalable approach 
+     to federated learning.
+    \item \emph{ScaRLib: Towards a hybrid toolchain for aggregate computing and many-agent reinforcement learning}~\cite{DBLP:journals/scp/DominiCAV24} \\
+    \textbf{Abstract: }
+    This article introduces ScaRLib, a Scala-based framework that aims to streamline the development cyber-physical swarms scenarios 
+     (i.e., systems of many interacting distributed devices that collectively accomplish system-wide tasks) by integrating macroprogramming and multi-agent 
+     reinforcement learning to design collective behavior. 
+    %
+     This framework serves as the starting point for a broader toolchain that will integrate these two approaches at multiple points to harness the 
+     capabilities of both, enabling the expression of complex and adaptive collective behavior.
+
+    \item \emph{Towards Intelligent Pulverized Systems: a Modern Approach for Edge-Cloud Services}~\cite{DBLP:conf/woa/DominiFAV24} \\
+    \textbf{Abstract: }
+    Emerging trends are leveraging the potential of the edge-cloud continuum to foster the creation of smart services capable of adapting to the 
+     dynamic nature of modern computing landscapes. 
+    %
+     This adaptation is achievable through two primary methods: by leveraging the underlying architecture to refine machine learning algorithms, 
+      and by implementing machine learning algorithms to optimize the distribution of resources and services intelligently. 
+    %  
+    This paper explores the latter approach, focusing on recent advancements in pulverized architecture, collective intelligence, and many-agent 
+     reinforcement learning systems. 
+    %
+    This novel trend, which we refer to as intelligent pulverized system (IPS), aims to create a new generation of services that can adapt to the 
+     complex and dynamic nature of the edge-cloud continuum. Our proposed learning framework integrates many-agent reinforcement learning, graph neural 
+     networks, and aggregate computing to create intelligent services tailored for this environment. 
+    %
+    We discuss the application of this framework across different levels of the pulverization model, illustrating its potential to enhance 
+     the adaptability and efficiency of services within the edge-cloud continuum.
+    \item \emph{Proximity-based Self-Federated Learning}~\cite{DBLP:conf/acsos/DominiFAVE24} \\
+    \textbf{Abstract: }
+    In recent advancements in machine learning, federated learning allows a network of distributed clients to collaboratively develop a global model 
+     without needing to share their local data. 
+    %
+    This technique aims to safeguard privacy, countering the vulnerabilities of conventional centralized learning methods. 
+    %
+    Traditional federated learning approaches often rely on a central server to coordinate model training across clients, aiming to replicate 
+     the same model uniformly across all nodes. 
+    %
+    However, these methods overlook the significance of geographical and local data variances in vast networks, potentially affecting model 
+     effectiveness and applicability. 
+    % 
+    Moreover, relying on a central server might become a bottleneck in large networks, such as the ones promoted by edge computing. 
+    %
+    Our paper introduces a novel, fully-distributed federated learning strategy called proximity-based self-federated learning that enables 
+     the self-organised creation of multiple federations of clients based on their geographic proximity and data distribution without 
+     exchanging raw data.
+    %
+    Indeed, unlike traditional algorithms, our approach encourages clients to share and adjust their models with neighbouring nodes based on geographic 
+     proximity and model accuracy. 
+    %
+    This method not only addresses the limitations posed by diverse data distributions but also enhances the model's adaptability to different regional 
+     characteristics creating specialized models for each federation. We demonstrate the efficacy of our approach through simulations on 
+     well-known datasets, showcasing its effectiveness over the conventional centralized federated learning framework.
+
+    \item \emph{Towards Self-Adaptive Cooperative Learning in Collective Systems}~\cite{DBLP:conf/acsos/Domini24} \\
+    \textbf{Abstract: }
+    Nowadays, collective adaptive systems have become crucial as modern systems increasingly adopt this vision.
+    %
+    These systems can be leveraged as a means to facilitate cooperative adaptive learning.
+    %
+    However, implementing such systems presents various challenges, including:
+     scalability, failures, non-iid data and complex architectures.
+    %
+    This paper presents a modern approach to cooperative and privacy-resilient learning by leveraging macroprogramming.
+    %
+    Specifically, we propose a new framework based on the integration of aggregate computing and federated learning,
+     aiming to address these challenges and enhance the effectiveness and security of cooperative learning systems.
+
+    \item \emph{A Reusable Simulation Pipeline for Many-Agent Reinforcement Learning}~\cite{DBLP:conf/dsrt/DominiAPV24} \\
+    \textbf{Abstract: }
+    Recent advancements in multi-agent reinforcement learning led to systems in which large groups of agents
+     work together to learn shared policies and achieve collective behavior.
+    %
+    This approach is increasingly important for many applications,
+     including swarm robotics, crowd sensing, and large-scale IoT networks.
+    %
+    In fact, these systems require repeated experimentation to learn from experience:
+     simulation becomes thus essential, as deploying and testing in real-world environments incurs in high costs and practical challenges.
+    %
+    In response to this need, our paper introduces a simulation-based pipeline to gather the necessary experience for many-agent learning.
+    %
+    We highlight the requirements of such pipeline and the role of simulation, presenting also a practical prototype implemented in Alchemist,
+     a simulator designed for very large-scale systems.
+    %
+    This pipeline provides a scalable, modular, and flexible environment for developing and testing many-agent reinforcement learning strategies.
+\end{enumerate}
+
+\section{Attended Conferences and Workshops}
+\begin{enumerate}
+    \item \textbf{Coordination Models and Languages} - 26th International Conference, COORDINATION 2024, Held as Part of the 19th International Federated Conference on Distributed Computing Techniques, DisCoTec 2024, Groningen, The Netherlands, June 17-21, 2024
+    \item \textbf{25th Workshop "From Objects to Agents"}, Bard (Aosta), Italy, July 8-10, 2024
+    \item \textbf{IEEE International Conference on Autonomic Computing and Self-Organizing Systems}, ACSOS 2024, Aarhus, Denmark, September 16-20 2024
+    \item \textbf{11th Workshop on Self-Improving Systems Integration}, SISSY 2024, Held as Part of ACSOS 2024, Aarhus, Denmark, September 16-20 2024
+    \item \textbf{2nd International Workshop on Artificial Intelligence for Autonomous computing Systems}, AI4AS 2024, Held as Part of ACSOS 2024, Aarhus, Denmark, September 16-20 2024
+    \item \textbf{28th International Symposium on Distributed Simulation and Real Time Applications}, DS-RT 2024, Urbino, Italy, October 7-9 2024
+\end{enumerate}
+
+\section{Doctoral Schools}
+\begin{enumerate}
+    \item \textbf{Bertionoro International Spring School 2024}, BISS 2024, Bertinoro, Italy, March 11-15 ,2024
+\end{enumerate}
+
+\section{Teaching Tutor}
+\begin{enumerate}
+    \item \textbf{Machine Learning Systems for Data Science} - Statistical Science Bachelor Degree
+    \item \textbf{Software Engineering (Modulo 1)} - Digital Transformation Management Master Degree
+\end{enumerate}
+
+\section{PhD Courses}
+
+\begin{enumerate}
+    \item \textbf{BISS 2024 - Bertinoro International Spring School - Program Analysis}
+    \begin{itemize}
+        \item Prof: Roberta Gori, Roberto Bruni  - Università di Pisa
+        \item Proposed CFU: 4 (12 hours) 
+        \item Period: March 2024
+        \item Exam: Not done, CFUs without evaluation
+    \end{itemize}    
+    \item \textbf{BISS 2024 - Bertinoro International Spring School - Graph Neural Networks}
+    \begin{itemize}
+        \item Prof: Fabrizio Silvestri - Sapienza Università di Roma
+        \item Proposed CFU: 4 (12 hours) 
+        \item Period: March 2024
+        \item Exam: Done
+    \end{itemize}  
+    \item \textbf{BISS 2024 - Bertinoro International Spring School - Large Language Models}
+    \begin{itemize}
+        \item Prof: Danilo Croce - University of Roma, Tor Vergata
+        \item Proposed CFU: 4 (12 hours) 
+        \item Period: March 2024
+        \item Exam: Done
+    \end{itemize}  
+    \item \textbf{Risk Assessment of ML for Cybersecurity}
+    \begin{itemize}
+        \item Fabio Pierazzi - King's College London
+        \item Proposed CFU: 5 (20 hours) 
+        \item Period: April 2024
+        \item Exam: Done
+    \end{itemize}    
+    \item \textbf{Introduction to Complex Systems Science} 
+    \begin{itemize}
+        \item Prof: Andrea Roli - Università di Bologna      
+        \item Proposed CFU: 2 (10 hours) 
+        \item Period: June 2024
+        \item Exam: To do
+    \end{itemize}    
+    
+\end{enumerate}
+%
+% ---- Bibliography ----
+%
+% BibTeX users should specify bibliography style 'splncs04'.
+% References will then be sorted and formatted in the correct style.
+%
+\bibliographystyle{alpha}
+\bibliography{mybibliography}
+%
+% \begin{thebibliography}{8}
+% \bibitem{ref_article1}
+% Author, F.: Article title. Journal \textbf{2}(5), 99--110 (2016)
+
+% \bibitem{ref_lncs1}
+% Author, F., Author, S.: Title of a proceedings paper. In: Editor,
+% F., Editor, S. (eds.) CONFERENCE 2016, LNCS, vol. 9999, pp. 1--13.
+% Springer, Heidelberg (2016). \doi{10.10007/1234567890}
+
+% \bibitem{ref_book1}
+% Author, F., Author, S., Author, T.: Book title. 2nd edn. Publisher,
+% Location (1999)
+
+% \bibitem{ref_proc1}
+% Author, A.-B.: Contribution title. In: 9th International Proceedings
+% on Proceedings, pp. 1--2. Publisher, Location (2010)
+
+% \bibitem{ref_url1}
+% LNCS Homepage, \url{http://www.springer.com/lncs}. Last accessed 4
+% Oct 2017
+% \end{thebibliography}
+\end{document}
