@@ -219,7 +219,10 @@ Finally, given the huge variability over time of the environments in which these
  be to integrate the proposed solutions with continual learning.
 
 \section{Pubblications}
-List of published (or already accepted) papers:
+List of published (or already accepted) papers.
+
+\noindent
+First year:
 \begin{enumerate}
     \item \emph{ScaRLib: A Framework for Cooperative Many Agent Deep Reinforcement Learning in Scala}~\cite{DBLP:conf/coordination/DominiCAV23} \\
     \textbf{Abstract: }
@@ -342,6 +345,109 @@ List of published (or already accepted) papers:
     %
     This pipeline provides a scalable, modular, and flexible environment for developing and testing many-agent reinforcement learning strategies.
 \end{enumerate}
+
+\noindent
+Second year:
+\begin{enumerate}
+    \item \emph{FBFL: A Field-Based Coordination Approach for Data Heterogeneity in Federated Learning}~\cite{DBLP:journals/corr/abs-2502-08577} (Submitted to Logical Method in Computer Science)\\
+    \textbf{Abstract: }
+    In the last years, Federated Learning (FL) has become a popular solution to train machine learning models
+     in domains with high privacy concerns.
+    %
+    However, 
+     FL scalability and performance face significant challenges 
+     in real-world deployments where data across devices are non-independently and identically 
+     distributed (non-IID).
+    %
+    The heterogeneity in data distribution frequently arises from spatial distribution of devices,
+     leading to degraded model performance in the absence of proper handling.
+    %
+    Additionally, 
+     FL typical reliance on centralized architectures introduces bottlenecks
+     and single-point-of-failure risks, particularly problematic at scale or in dynamic environments.
+
+    To close this gap, 
+     we propose FBFL, a novel approach leveraging 
+     macroprogramming and field coordination to address these limitations through:
+    \begin{enumerate*}[label=(\roman*)]
+        \item distributed spatial-based leader election for personalization to mitigate non-IID data challenges; and
+        \item construction of a self-organizing, hierarchical architecture using advanced macroprogramming patterns. 
+    \end{enumerate*}
+    %
+    Moreover, FBFL not only overcomes the aforementioned limitations, but also enables the development 
+     of more specialized models tailored to the specific data distribution in each subregion.
+
+    %
+    This paper formalizes FBFL and evaluates it extensively using 
+     MNIST, FashionMNIST, and Extended MNIST datasets. 
+    %
+    We demonstrate that, when operating under IID data conditions, FBFL performs 
+     comparably to the widely-used FedAvg algorithm.
+    %
+    Furthermore, in challenging non-IID scenarios, FBFL not only outperforms FedAvg but also 
+     surpasses other state-of-the-art methods, namely FedProx and Scaffold, which have been 
+     specifically designed to address non-IID data distributions.
+    %
+    Additionally, we showcase the resilience of FBFL's self-organizing hierarchical architecture against server failures.
+
+    \item \emph{Neighbor-Based Decentralized Training Strategies for Multi-Agent Reinforcement Learning}~\cite{DBLP:conf/sac/MalucelliDAV25} \\
+    \textbf{Abstract: }
+    Multi-agent deep reinforcement learning has demonstrated significant potential as a promising framework for developing 
+     autonomous agents capable of operating within complex, multi-agent environments  
+     in a wide range of domains, like robotics, traffic management, and video games.
+    %
+    Centralized training with decentralized execution has emerged as the predominant training paradigm, 
+     demonstrating significant effectiveness in learning complex policies.
+    %
+    However, its reliance on a centralized learner necessitates that agents acquire policies offline and subsequently 
+     execute them online.
+    % 
+    This constraint motivates the exploration of decentralized training methodologies.
+    %
+    Despite their greater flexibility, decentralized approaches often face critical challenges, like: 
+     slower convergence rates, higher instability and lower performance compared to centralized methods. 
+    %
+    Therefore, this paper proposes three neighbor-based decentralized training 
+     strategies based on the Deep-Q Learning algorithm and investigates their effectiveness as 
+     a viable alternative to centralized training. 
+    %  
+    We evaluate experience sharing, k-nearest neighbor averaging, and k-nearest neighbor consensus methods 
+     in a cooperative multi-agent environment and compare their performance against centralized training
+     and totally decentralized training. 
+    %  
+    Our results show that neighbor-based methods can achieve comparable performance to centralized training 
+     while offering improved scalability and communication efficiency.
+    
+    \item \emph{Sparse Self-Federated Learning for Energy Efficient Cooperative Intelligence in Society 5.0}~\cite{DBLP:journals/corr/abs-2507-07613} 
+     (Accepted at the Green Federated Learning Workshop 2025 ) \\
+    \textbf{Abstract: }
+    Federated Learning offers privacy-preserving collaborative intelligence but struggles to meet the sustainability demands 
+     of emerging IoT ecosystems necessary for Society 5.0---a human-centered technological future balancing social advancement 
+     with environmental responsibility. 
+    % 
+    The excessive communication bandwidth and computational resources required by traditional FL approaches make them 
+     environmentally unsustainable at scale, creating a fundamental conflict with green AI principles as billions 
+     of resource-constrained devices attempt to participate. 
+    % 
+    To this end, we introduce Sparse Proximity-based Self-Federated Learning (SParSeFuL), 
+     a resource-aware approach that bridges this gap by combining aggregate computing for self-organization with neural network 
+     sparsification to reduce energy and bandwidth consumption.
+     
+    \item \emph{A Demonstrator for Self-organizing Robot Teams}~\cite{DBLP:conf/coordination/AguzziBBCCDFPV25} \\
+    \textbf{Abstract: }
+    Aggregate computing is a paradigm with over a decade of investigation and multiple programming frameworks available, 
+     which proved to be particularly suitable for the simulation of applications in challenging domains such as smart cities
+     and robot swarms. 
+    % 
+    This paper introduces a toolchain for practical multi-robot demonstrations based on aggregate computing principles, 
+     and validates it with a live interactive demo in an open-public event in the context of the European Researchers' Night. 
+    % 
+    More specifically, we show how we coordinated a team of mobile robots to form spatial patterns.
+    %
+    We discuss the practical demonstration performed in an indoor environment, 
+     which exploits a camera system and ArUco markers for localization.
+\end{enumerate}
+
 
 \section{Attended Conferences and Workshops}
 \begin{enumerate}
