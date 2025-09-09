@@ -154,69 +154,76 @@ For instance, consider a task that uses text written by users on their phones; i
  will produce data with different distributions.
 
 \section{Methodology and Preliminary Results}\label{sec:methodology}
+Building upon the work conducted during the first year, 
+ several activities have been carried forward and expanded.
 
- Initially, a review of related works in the literature has been conducted to assess the current state of development in FL 
-  and to identify key challenges.
- %
- Specifically, the focus was on subareas relevant to our interests, namely: 
-  higly distributed systems and non-iid data.
-  %\dom{forse higly distributed systems va cambiato con qualcosa di più specifico}
- %
- Once identified the main open problems and challenges in FL we started to design custom algorithms based 
-  on field coordination.
-  Regarding AC, we have exploited the ScaFi~\cite{DBLP:journals/softx/CasadeiVAP22} implementation and toolchain
-  which provides a high-level functional DSL in Scala.
-  On the other hand, as deploying such systems in real-world has high costs, we used a simulator for pervasive systems, 
-  namely: Alchemist~\cite{DBLP:journals/jos/PianiniMV13}.
+First of all, the two approaches for field-based Federated Learning that we proposed and presented 
+ at conferences during the first year have been further developed, consolidated, extensively tested, 
+ and submitted for journal publication. 
  
- More in detail -- in our first work~\cite{DBLP:conf/coordination/DominiAEV24} -- we tried to assess two different aspects of
-  FL based on field coordination.
- %
- On the one hand, we implemented a full peer-to-peer (i.e., devices are not split into clusters) FL algorithm using AC abstractions, then we compared it with a 
-  centralized implementation of FL to see whether results and accuracies were comparable.
- %
- On the other hand, we implemented a version of FL based on the SCR pattern. 
- %
- The hypothesis behind this experiment was that geographically close devices may have a similar data 
-  distribution for a certain phenomenon.
- % 
- Exploiting SCR allowed us to create multiple sub-zones within a certain range and then perform a centralized FL inside each zone,
-  thus evolving multiple specialized models.
- %
- To experiment with this algorithm we used PM10 samples from different stations in Europe\footnote{Dataset available at: \url{https://www.eea.europa.eu/data-and-maps/dashboards/air-quality-statistics}}
-  and performed a task of air quality forecasting.
- %
- Results have shown that the proposed approach has similar performance to the centralized implementation when using iid data 
-  while outperforming it in the case of non-iid data with distributions influenced by the geographical location of devices.
- 
- Finally, we proposed another approach~\cite{DBLP:conf/acsos/DominiFAVE24} which extends the implementation based on the SCR pattern
-     using the concept of space-fluidity~\cite{DBLP:journals/lmcs/CasadeiMPVZ23}.
- %
- In this way, it is possible to create specialized subzones that are not only based on spatial proximity but also take into account other 
-  specified metrics.
- %
- For instance, we used a metric based on the loss of local models to broaden or shrink zones to match a specified 
-  maximum loss threshold.   
+In particular, the work~\cite{DBLP:conf/coordination/DominiAEV24}
+ has been submitted to the Q2 journal Logical Methods in Computer Science, 
+ while~\cite{DBLP:conf/acsos/DominiFAVE24} has been submitted to the special issue
+ Collective Intelligence for the Internet of Things of the Q1 journal Internet of Things (Elsevier). 
+% 
+Both submissions have successfully passed the first round of reviews.
 
-\section{Future Work and Research Plan}\label{sec:future}
-
-Beyond the preliminary results obtained, we believe that the integration of federated learning and macroprogramming for collective systems still has several
- open directions that can lead to improvements. 
-
-Firstly, considering the context of collective systems and the limited resources available to various devices in most cases, 
-%we believe that an interesting direction could be
- a particularly promising direction that will be pursued in the near future is 
- experimenting with methods like quantization and pruning or using novel architectures like the sparse neural networks, 
- which aim to limit the use of weights in order to reduce the computational load required for training and inference.
-
-Moreover, it would be interesting to study the effect that the movement of nodes in space and consequently between various clusters has. 
+In addition, we initiated a new collaboration with the Free University of Bozen-Bolzano and Radboud University Nijmegen. 
 %
-We believe that this, within certain limits, can bring benefits due to the sharing of previously acquired knowledge (i.e., knowledge fertilization). 
+This work aims to integrate our self-organizing FL approach with sparse neural networks. 
 %
-To study this phenomenon, metrics will need to be defined to quantitatively and objectively measure the effects.
+The combination of these techniques enables us to significantly reduce training and inference times and costs, 
+ thus making our approach applicable to smart city scenarios where devices have limited computational resources. 
+%
+This collaboration has already led to a paper accepted at the Workshop on Green Federated Learning 
+ co-located with the International Joint Conference on Neural Networks 2025 (IJCNN 2025)~\cite{DBLP:journals/corr/abs-2507-07613}.
 
-Finally, given the huge variability over time of the environments in which these systems are immersed, a solution to maintain adaptability over time could 
- be to integrate the proposed solutions with continual learning.
+Finally, we developed a benchmark to validate approaches designed for scenarios similar to ours, 
+ i.e., involving proximity-based non-iid data where device location influences data distribution. 
+% 
+The benchmark, called ProFed, is open-source and aims to facilitate the evaluation and comparison 
+ of FL solutions under realistic spatially correlated data settings. 
+% 
+This work, carried out in collaboration with Aarhus University (Denmark), 
+ has been submitted for publication to the Q1 Journal of Open Research Software (JORS).
+
+% \section{Future Work and Research Plan}\label{sec:future}
+
+% Beyond the preliminary results obtained, we believe that the integration of federated learning and macroprogramming for collective systems still has several
+%  open directions that can lead to improvements. 
+
+% Firstly, considering the context of collective systems and the limited resources available to various devices in most cases, 
+% %we believe that an interesting direction could be
+%  a particularly promising direction that will be pursued in the near future is 
+%  experimenting with methods like quantization and pruning or using novel architectures like the sparse neural networks, 
+%  which aim to limit the use of weights in order to reduce the computational load required for training and inference.
+
+% Moreover, it would be interesting to study the effect that the movement of nodes in space and consequently between various clusters has. 
+% %
+% We believe that this, within certain limits, can bring benefits due to the sharing of previously acquired knowledge (i.e., knowledge fertilization). 
+% %
+% To study this phenomenon, metrics will need to be defined to quantitatively and objectively measure the effects.
+
+% Finally, given the huge variability over time of the environments in which these systems are immersed, a solution to maintain adaptability over time could 
+%  be to integrate the proposed solutions with continual learning.
+
+\section{Period Abroad}
+As part of my PhD program, I am currently carrying out a three-month research stay abroad, 
+ which started in September 2025 and spans the transition between 
+ the second and third year of my doctoral studies.
+
+This research period is hosted at Trinity College Dublin (Ireland) 
+ under the supervision of Prof. Ivana Dusparic. 
+% 
+The focus of this research stay is on the development and evaluation of neighbor-based transfer 
+ learning techniques for multi-agent reinforcement learning (MARL).
+
+The goal of this work is to design and analyze methods that enable agents to exploit information 
+ from their neighboring peers to accelerate learning and improve coordination performance 
+ in distributed MARL settings. 
+% 
+This line of research is complementary to my work on field-based federated learning and aims 
+ to explore synergies between FL and MARL in scenarios characterized by spatially correlated and dynamic environments.
 
 \section{Pubblications}
 List of published (or already accepted) papers.
