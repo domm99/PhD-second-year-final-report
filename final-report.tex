@@ -68,90 +68,70 @@
     
 \end{titlepage}
 
-\section{Context}
+\section{Research Context}\label{sec:intro}
+
+\subsection{Context}
 Computing devices have become ubiquitous in everyday life.
 %
-This trend has paved the way for the emergence of a field known as collective computing~\cite{DBLP:journals/computer/Abowd16}.
+This trend has paved the way for research fields aimed at exploiting
+ the potential of device collectives to build next-generation systems, 
+ including: collective computing~\cite{DBLP:journals/computer/Abowd16}
+ and Collective Adaptive Systems (CAS)~\cite{DBLP:journals/sttt/WirsingJN23,robyphdthesis}.
 %
-These systems are composed of many -- potentially heterogeneous -- interacting devices. 
+More in detail, following Mitchell's definition~\cite{DBLP:conf/metacognition/Mitchell05}, 
+ in this thesis we refer to CAS as distributed systems comprising multiple agents 
+ such that each agent:
+ \begin{enumerate*}[label=(\roman*)]
+	\item can interact with other agents either directly or indirectly;
+	\item does not individually posses system-wide knowledge;
+	\item can exhibit learning to expand its personal knowledge; and
+	\item can make decisions based on collective or aggregated knowledge from some of its peers.
+ \end{enumerate*}
 %
-Each device is equipped with sensors to perceive the surrounding environment and is able to communicate with a subset of other devices 
- (e.g., based on logical or physical proximity). %, thus creating a neighborhood.
-%
-Some real-world examples of these systems include: 
- crowd management using wearable devices or smartphones,
- smart surveillance using flocks of drones, 
- air quality monitoring, and many more. 
-%
-Analyzing collective systems it is possible to identify some key features, namely:
-\begin{enumerate*}[label=(\roman*)]
-    \item each device, potentially, produces a huge amount of data;
-    \item devices need to cooperate among themselves to solve the collective task; and
-    %\item data are naturally distributed (i.e., ); and
-    \item data are subject to privacy constraints due to laws (e.g., GDPR~\cite{GDPR} in the European Union).
-\end{enumerate*}
+Notably, we focus on systems involving a large number of agents -- potentially in the hundreds
+ or thousands -- which is commonly referred to in the literature 
+ as many-agents~\cite{DBLP:phd/ethos/Yang21a}.
 
-In recent years, macroprogramming approaches~\cite{DBLP:journals/csur/Casadei23} have been proposed to shift the focus onto the collective of devices
- rather than on the single device.
+\subsection{Opportunities and challenges}
+These systems enable the development of innovative applications in a wide range of real-world domains, such as: 
+ smart cities~\cite{DBLP:conf/icse/IftikharRBW017}, 
+ traffic control~\cite{DBLP:journals/tits/ChuWCL20,DBLP:books/sp/Muller2011/ProthmannTBHMS11} 
+ with autonomous vehicles~\cite{DBLP:journals/corr/BojarskiTDFFGJM16}, 
+ coordinated robot swarms for search and rescue~\cite{DBLP:journals/ijon/ZhouLLXS21} 
+ or environmental monitoring~\cite{DBLP:conf/acsos/AguzziVE23}, and many more.
 %
-More in particular, Aggregate Computing (AC)~\cite{DBLP:journals/computer/BealPV15} proposes the development of a single aggregate program as a 
- composition of functions over computational fields (i.e., an abstraction that maps each device to a value in space and time). 
+Nevertheless, while these systems have significant potential, their engineering 
+ presents several challenges.
 %
-AC is rooted in Field Calculus (FC)~\cite{DBLP:conf/forte/AudritoVDPB19}, a core language designed to capture the essential aspects of languages that make use of
- computational fields and that allows the formal demonstration of properties such as 
- self-stabilization~\cite{DBLP:conf/coordination/ViroliD14} and eventual consistency~\cite{DBLP:journals/taas/BealVPD17}.
+First and foremost, control and decision-making demand particular attention.
 %
-Moreover, AC allows the definition of scalable and resilient programs, thus being a good candidate as a framework 
- for cooperative learning in collective systems.
-%
-%While AC allows the definition of scalable and resilient programs, encoding very complex behaviors is still an open challange.
-%
-For this reason, attempts have been made to combine AC and machine learning, first using multi-agent reinforcement learning 
-techniques~\cite{DBLP:conf/coordination/AguzziCV22,DBLP:conf/acsos/AguzziVE23,DBLP:conf/coordination/DominiCAV23,DBLP:journals/scp/DominiCAV24,DBLP:conf/woa/DominiFAV24}, 
-and then shifting towards federated learning~\cite{DBLP:conf/coordination/DominiAEV24,DBLP:conf/acsos/DominiFAVE24}. 
-
-%
-Specifically, Federated Learning (FL)~\cite{DBLP:conf/aistats/McMahanMRHA17} has emerged as a framework to cooperatively train a joint model
- while maintaining data localization.
-%
-Classic FL approaches are based on a simple client-server architecture in which each client $c_i$, at each time step $t$, is responsible for training 
- a model $m_i^t$ on the local dataset $D_i$ (i.e., the local model), while the server is responsible for collecting all the 
- models $\{m_1^t, \dots, m_n^t\}$ and for aggregating them -- following some aggregation policy~\cite{DBLP:journals/fgcs/QiCGIFP24} -- into the 
- new global model $m_g^{t+1}$ which will be further locally improved by each device at the next time step.
-%
-Since FL does not require sharing the data it is possible to work also in contexts with privacy concerns and where it is not possible to collect
- all the data in a centralized server due to their huge volume and resource constraints.
-%
-However, two main challenges are still open, namely:
-\begin{enumerate*}[label=(\roman*)]
-    \item in real-world systems, data are often non-independently and identically distributed (non-iid), thus leading centralized implementations
-     of FL to convergence issues~\cite{DBLP:conf/mir/YangLHSL024}; and
-    \item relying on a single central server introduces a bottleneck (especially in systems with a huge amount of devices) 
-     and a single point of failure (i.e., if the server fails then all the learning process is interrupted).
-\end{enumerate*}
-
-To tackle these challenges, in the literature, works have been proposed to introduce FL algorithms based 
- on distributed architectures~\cite{DBLP:journals/jpdc/HegedusDJ21,DBLP:conf/dsn/WinkN21}
- and personalization~\cite{DBLP:journals/tnn/TanYCY23}.
-%
-More in particular, our focus lies on a subfield of personalized FL which assumes that devices can be clustered into groups and that inside each 
- group data are independently and identically distributed (iid)~\cite{DBLP:journals/tit/GhoshCYR22,DBLP:conf/ecai/Li0TWXZ23}, 
- thus avoiding convergence issues and producing models with better performance.
+Achieving an optimal balance between centralized and decentralized control is crucial, 
+ as neither extreme is feasible nor desirable~\cite{DBLP:conf/coordination/CasadeiPVN19,DBLP:journals/tits/ChuWCL20,DBLP:journals/jair/LyuBXDA23} 
+ in many dynamic systems. 
 % 
-Although clustered FL generally has significant potential, its applicability in the context of collective systems holds many challenges, mainly: 
- clustering is performed in a centralized manner, and a fixed number of clusters must be chosen a priori. 
-% 
-This causes issues because, in contexts with numerous devices, there is considerable overhead associated with selecting clusters. 
+Indeed, excessive centralization may lead to bottlenecks and single points of failure, 
+ whereas complete decentralization can hinder coordination and consistency.
 %
-Moreover, predefining a number of clusters is often a difficult task, and an incorrect number can lead to convergence problems.
+Additionally, the dynamic nature of these systems, characterized by constant 
+ environmental changes, mobility, and potential component failures, requires adaptive 
+ learning mechanisms capable of responding swiftly 
+ to evolving conditions~\cite{DBLP:journals/swarm/PrasetyoMF19}.
 %
-Finally, clustered FL methods in the literature does not take into account the spatial distribution of devices.
+Another key consideration is the locality principle, where operational efficiency and cost 
+ are heavily influenced by the spatial proximity of data sources, processing units, and users.
 %
-However, in many contexts, this information can be crucial for achieving better clustering. 
+Furthermore, partial observability introduces uncertainty, as individual components may have 
+ limited or incomplete information about the global state, complicating accurate 
+ decision-making~\cite{DBLP:conf/uai/HeDB22}.
 %
-For instance, consider a task that uses text written by users on their phones; it is very likely that users who are 
- geographically close (e.g., within the same state) will write similarly, whereas users who are far apart 
- will produce data with different distributions.
+Data privacy is also a growing concern, particularly in light of stringent regulations like GDPR~\cite{GDPR}
+ in the European Union, necessitating privacy-preserving learning techniques.
+%
+Finally, data heterogeneity~\cite{DBLP:journals/fgcs/MaZLCQ22,DBLP:journals/ijon/ZhuXLJ21},
+ stemming from diverse source, can significantly impact learning stability and accuracy.
+%
+Addressing these challenges is essential for the effective deployment of cooperative learning 
+ in collective adaptive systems.
 
 \section{Methodology and Preliminary Results}\label{sec:methodology}
 Building upon the work conducted during the first year, 
@@ -188,25 +168,80 @@ The benchmark, called ProFed, is open-source and aims to facilitate the evaluati
 This work, carried out in collaboration with Aarhus University (Denmark), 
  has been submitted for publication to the Q1 Journal of Open Research Software (JORS).
 
-% \section{Future Work and Research Plan}\label{sec:future}
+\section{Future Work}\label{sec:future}
 
-% Beyond the preliminary results obtained, we believe that the integration of federated learning and macroprogramming for collective systems still has several
-%  open directions that can lead to improvements. 
+The investigation performed in this first two years, opened several research directions
+ to be explored in the future.
 
-% Firstly, considering the context of collective systems and the limited resources available to various devices in most cases, 
-% %we believe that an interesting direction could be
-%  a particularly promising direction that will be pursued in the near future is 
-%  experimenting with methods like quantization and pruning or using novel architectures like the sparse neural networks, 
-%  which aim to limit the use of weights in order to reduce the computational load required for training and inference.
+\paragraph{Real-world use cases.}
 
-% Moreover, it would be interesting to study the effect that the movement of nodes in space and consequently between various clusters has. 
-% %
-% We believe that this, within certain limits, can bring benefits due to the sharing of previously acquired knowledge (i.e., knowledge fertilization). 
-% %
-% To study this phenomenon, metrics will need to be defined to quantitatively and objectively measure the effects.
+First and foremost, it will be crucial to define a detailed set of real-world use cases where our proposed approaches can be applied. 
+%
+Potential applications include traffic control or heating management for smart buildings. 
+%
+This will allow us to test our methods not only on synthetic datasets but also in real-world scenarios, 
+ ensuring their practical relevance and robustness. 
+% 
+Moreover, it will provide valuable insights into how the creation of specialized learning subregions, based on data distribution, 
+ affects the size and complexity of the required models. 
+% 
+Our intuition is that decomposing a phenomenon into simpler subproblems will enable learning with smaller, more efficient models, 
+ ultimately leading to resource savings.
 
-% Finally, given the huge variability over time of the environments in which these systems are immersed, a solution to maintain adaptability over time could 
-%  be to integrate the proposed solutions with continual learning.
+\paragraph{Energy Efficiency and Sparse Neural Networks.}
+Another key challenge in these systems is that devices often operate under strict computational constraints. 
+%
+For this reason, we see sparse neural networks as a promising research avenue. 
+%
+This technique enables the removal of unimportant weights in neural networks, allowing learning even on devices without 
+ GPUs or powerful CPUs. 
+% 
+We have already begun experiments in this direction in collaboration with the University of Bolzano, 
+ and our preliminary results are highly encouraging. 
+% 
+Future work will also include comparison with other model optimization techniques, such as quantization, 
+ to further reduce the training footprint.
+
+\paragraph{Neighbor-based MARL and Transfer Learning.}
+Additional promising research directions stem from our work on neighbor-based MARL approaches.
+%
+Specifically, it will be interesting to investigate whether and how these methods stabilize learning in environments 
+ where agents interact with highly localized phenomena. 
+% 
+Furthermore, in collaboration with a research group at Trinity College Dublin, we plan to explore the integration of neighbor-based 
+ learning with transfer learning for reinforcement learning and aggregate computing.
+%
+This integration could provide multiple benefits. 
+%
+First, information exchange between agents would occur only when uncertainty is high in a given state, reducing unnecessary communication 
+ and potentially improving training efficiency. 
+% 
+This way, an agent with low confidence in a state would avoid sharing misleading information with a more experienced agent, 
+ which could otherwise negatively impact future learning.
+%
+Finally, by incorporating the self-organizing coordination region concept from aggregate computing, we can envision a scenario where 
+ each region dynamically elects a teacher (i.e., the leader).
+% 
+This leader, having already learned the dynamics of its area, can assist nearby agents by sharing its experience. 
+%
+This could be particularly beneficial in settings where agents have heterogeneous models due to varying computational constraints. 
+%
+In such cases, a more powerful agent could train using a larger model, converge faster, and then act as a teacher to support resource-limited 
+ agents in the learning process.
+
+\paragraph{Continual Learning}
+While our primary focus is on the more immediate research directions, 
+ we also have a long-term vision for our work. 
+% 
+One possible future direction is the integration of continual learning (CL) techniques into our proposed approaches. 
+%
+Given that CAS are inherently dynamic and evolve over time, ensuring that the learning process can adapt to these changes is crucial. 
+%
+CL offers a promising solution by enabling models to learn from new data while retaining knowledge from past experiences. 
+%
+This would allow our models to remain up-to-date and effectively handle new scenarios without forgetting previously 
+ acquired information.
+
 
 \section{Period Abroad}
 As part of my PhD program, I am currently carrying out a three-month research stay abroad, 
