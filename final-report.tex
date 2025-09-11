@@ -489,6 +489,147 @@ Second year:
     %
     We discuss the practical demonstration performed in an indoor environment, 
      which exploits a camera system and ArUco markers for localization.
+    \item \emph{Decentralized Proximity-Aware Clustering for Collective Self-Federated Learning} \\ (Submitted to Elsevier Internet of Things Journal) \\
+    \textbf{Abstract: }
+    In recent years, 
+     Federated Learning (FL) has emerged as a privacy-preserving paradigm for collaborative model training in IoT systems, 
+     enabling clients to learn a global model for tasks like classification, prediction, 
+     or anomaly detection in IoT environments without sharing raw data.
+    %
+    However, 
+     traditional centralized FL architectures face bottlenecks, single points of failure, 
+     and struggle with non-IID data.
+    %
+    These limitations hinder effective Collective Intelligence in large-scale IoT systems 
+     where numerous devices operate across diverse and dynamic environments.
+    % 
+    Existing clustered FL approaches often retain centralization or 
+     overlook how the spatial distribution inherent in IoT deployments 
+     directly influences data heterogeneity, 
+     challenging both the integration of spatially correlated devices and the
+     establishment of intelligence distributed across the entire system.
+    %
+    Creating such intelligence demands both decentralized architectures for scalability 
+     and effective integration of devices with similar data distributions.
+
+    For these reasons, this article introduces \emph{Proximity-Aware Self-Federated Learning (PSFL)}, 
+     a novel decentralized approach embodying collective intelligence principles. 
+    %
+    PSFL leverages field-based coordination to enable IoT devices to form \emph{self-federations},
+     dynamically clustered groups that train specialized models based on both spatial proximity and local model characteristics. 
+     These self-federations reflect underlying data distributions, 
+     creating a distributed ecosystem of specialized models across the network.
+    %
+    This approach overcomes global model limitations in non-IID settings through 
+     specialized federations based on local data distributions, enhancing performance
+     while maintaining decentralization.
+    %
+    We evaluate our approach using the Extended MNIST and CIFAR-100 datasets against state-of-the-art baselines,
+     demonstrating its effectiveness in forming coherent, 
+     localized models under non-IID conditions.
+    \item \emph{Heterogeneous GNN for Collective-Task Offloading in Cloud-Edge via Deep Q-Learning} \\ (Submitted to Future Generation Computer Systems Journal) \\
+    \textbf{Abstract: }
+    Task offloading in edge-cloud computing systems requires determining optimal allocation of 
+     application components across heterogeneous infrastructure while balancing multiple objectives, 
+     like energy consumption, latency, or cost.
+    %
+    This problem becomes particularly complex in large-scale deployments (e.g., smart cities, industrial IoT) 
+     where existing approaches fail to address collective phenomena, 
+     namely emergent system-wide behaviors like network congestion that arise from multi-device interactions, 
+     leading to suboptimal offloading decisions in large-scale deployments.
+    %
+    To address these challenges 
+     this paper introduces a multi-agent learning framework for collective component offloading 
+     that decomposes applications into a directed acyclic graph of macro-components, 
+     enabling partial offloading where individual components can be selectively executed locally or migrated to edge/cloud servers.
+    %
+    Our system model represents the infrastructure as a heterogeneous graph of application devices 
+     and infrastructure nodes, 
+     supporting decentralized offloading decisions while maintaining component interdependencies.
+     In particular, we propose Informed Deep Hetero Graph Q-Learning (IDHGQL), 
+     \begin{enumerate*}[label=(\arabic*)]
+      \item Heterogeneous Graph Neural Network for policy representation that naturally handle diverse device types and relationships.
+      \item Aggregate computing to enrich device observations with collective system state information.
+      \item A multi-agent Deep Q-Learning algorithm based on centralized training with decentralized execution that balances individual constraints with emergent collective phenomena.
+     \end{enumerate*}
+    %
+    Experimental evaluation demonstrates IDHGQL's effectiveness in multi-objective optimization scenarios,
+     successfully learning policies that balance battery consumption, 
+     latency, and infrastructure costs. 
+    %
+    In density-aware scenarios, 
+     agents learn spatially-differentiated strategies, 
+     namely executing locally in high-congestion areas while offloading in sparse regions, 
+     achieving superior performance compared to static baselines 
+     and validating the critical importance of collective information integration.
+    \item \emph{ProFed: a Benchmark for Proximity-based non-IID Federated Learning} \\ (Submitted to Journal of Open Research Software) \\
+    \textbf{Abstract: }
+    Federated Learning has emerged as a key paradigm in machine learning, 
+     but its performance often deteriorates under non-independent and identically distributed 
+     (non-IID) client data. 
+    % 
+    Such heterogeneity frequently reflects geographic factors, e.g., regional linguistic variations 
+     or localized traffic patterns, leading to IID data within regions but 
+     non-IID distributions across them. 
+    %
+    However, existing FL algorithms are typically evaluated by randomly splitting 
+     non-IID data across devices, disregarding their spatial distribution.
+        
+    To address this gap, we introduce \textsc{ProFed}, a benchmark that simulates data splits 
+     with varying degrees of skewness across different regions. 
+    %
+    We incorporate several skewness methods from the literature and apply them to 
+     well-known datasets, including MNIST, FashionMNIST, CIFAR-10, CIFAR-100 and UTKFace.
+    %
+    Our goal is to provide researchers with a standardized framework to evaluate FL algorithms 
+     more effectively and consistently against established baselines.
+    \item \emph{Scaling Swarm Coordination with GNNs -- How Far Can We Go?} \\ (Submitted to MDPI AI) \\
+    \textbf{Abstract: }
+    The scalability of coordination policies is a critical challenge in swarm robotics, 
+     where agent numbers may vary substantially between deployment scenarios. 
+    %
+    Graph Neural Networks (GNNs) have emerged as a promising tool for learning 
+     decentralized policies from local interactions, 
+     but their zero-shot transfer across swarm sizes remains underexplored. 
+    % 
+    We empirically study this by combining GNNs with Deep Q-Learning in cooperative swarms.
+    %
+    We formalize Deep Graph Q-Learning (DGQL), which processes agent-neighbor graphs within Q-learning, 
+     and train on fixed-size swarms. Across two benchmarks (goal-reaching, obstacle avoidance), 
+     we deploy up to $3\times$ larger teams. 
+    % 
+    DGQL preserves functional coordination without retraining, but efficiency degrades with size: 
+     terminal goal distance grows monotonically (15-29 agents) and worsens beyond roughly $2\times$ the training size ($\approx 20$ agents), 
+     with task-dependent trade-offs. 
+    % 
+    Our results quantify scalability limits of GNN-enhanced DQL and suggest architectural and training strategies 
+     to better sustain performance across scales.
+    \item \emph{SParSeFuL: Decentralized Federated Learning for Non-IID IoT Systems} \\ (Submitted to Annual AAAI Conference on Artificial Intelligence) \\
+    \textbf{Abstract: }
+    Federated learning has emerged as a promising solution for training machine learning models while preserving privacy in distributed environments.
+    %
+    However, deploying federated learning in large-scale Internet of Things (IoT) systems presents significant challenges: 
+     data heterogeneity across spatially distributed devices, resource constraints of edge devices, and the lack of reliable centralized infrastructure.
+    %
+    Classical federated learning approaches struggle with non-IID data distributions and require a centralized server for model aggregation, 
+     which leads to inefficiencies and high communication overhead.
+    %
+    To address these limitations, we propose Sparse Proximity-based Self-Federated Learning (SParSeFuL), 
+     a novel decentralized architecture that combines self-organizing distributed systems with neural network 
+     sparsification for sustainable and privacy-preserving machine learning at scale.
+    %
+    SParSeFuL leverages self-organizing methods to dynamically form federations of spatially proximate devices with similar data distributions, 
+     enabling personalized model training that respects local data patterns while maintaining global learning objectives.
+    %
+    By integrating neural network sparsification techniques, our approach significantly reduces computational and communication overhead, 
+     making it suitable for resource-constrained IoT environments.
+    %
+    To demonstrate the potential of SParSeFuL, we conduct an extensive experimental evaluation on the widely 
+    used Extended MNIST dataset, comparing it against several state-of-the-art federated learning algorithms -- namely 
+    FedAvg, FedProx, Scaffold, and IFCA -- showing that SParSeFuL outperforms most baselines even 
+    at a sparsification level up to 70\%.
+
+    
 \end{enumerate}
 
 
